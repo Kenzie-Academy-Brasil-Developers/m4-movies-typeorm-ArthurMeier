@@ -27,14 +27,14 @@ const listMoviesController = async (
 ): Promise<Response> => {
   const perPage = Number(req.query.perPage) || 5;
   const page = Number(req.query.page) || 1;
-  const order =
-    req.query.order === "asc" || req.query.order === "desc"
-      ? req.query.order
-      : "asc";
   const sort =
     req.query.sort === "price" || req.query.sort === "duration"
       ? req.query.sort
       : "id";
+  const order =
+    (req.query.order === "asc" || req.query.order === "desc") && sort !== "id"
+      ? req.query.order
+      : "asc";
 
   const movies = await listMoviesService(perPage, page, order, sort);
 

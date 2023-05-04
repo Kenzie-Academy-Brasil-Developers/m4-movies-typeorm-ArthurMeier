@@ -6,7 +6,7 @@ import {
   updateMovieController,
 } from "../controllers/movies.controller";
 import verifyDataIsValid from "../middleware/verifyDataIsValid.middleware";
-import { movieSchemaRequest } from "../schemas/movie.Schema";
+import { movieSchemaRequest, movieSchemaUpdate } from "../schemas/movie.Schema";
 import verifyNameExists from "../middleware/verifyNameAlreadyExists.middleware";
 import veriftIdExist from "../middleware/VirifyIdExist.middleware";
 
@@ -25,6 +25,7 @@ movieRoutes.patch(
   "/:id",
   veriftIdExist,
   verifyNameExists,
+  verifyDataIsValid(movieSchemaUpdate),
   updateMovieController
 );
 

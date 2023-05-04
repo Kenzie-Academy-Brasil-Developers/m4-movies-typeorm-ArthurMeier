@@ -13,8 +13,6 @@ const updateMovieService = async (
 ): Promise<TMovieResponse> => {
   const movieRepository: Repository<Movie> = AppDataSource.getRepository(Movie);
 
-  const movieDataFromBody = movieSchemaUpdate.parse(movieData);
-
   const oldMovieData: Movie | null = await movieRepository.findOneBy({
     id: movieId,
   });
@@ -27,6 +25,8 @@ const updateMovieService = async (
   await movieRepository.save(newMovieData);
 
   const returnMovie: TMovieResponse = movieSchema.parse(newMovieData);
+
+  console.log(returnMovie);
 
   return returnMovie;
 };

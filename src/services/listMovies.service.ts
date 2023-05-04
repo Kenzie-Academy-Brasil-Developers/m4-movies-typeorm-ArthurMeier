@@ -12,7 +12,7 @@ const listMoviesService = async (
 ): Promise<Pagination> => {
   const movieRepository: Repository<Movie> = AppDataSource.getRepository(Movie);
 
-  perPage = perPage <= 0 ? 5 : perPage;
+  perPage = perPage <= 0 || perPage > 5 ? 5 : perPage;
   page = page <= 0 ? 1 : page;
 
   const options: FindManyOptions<Movie> = {
@@ -23,20 +23,16 @@ const listMoviesService = async (
 
   const [movies, count] = await movieRepository.findAndCount(options);
 
-  const returnMovies: TMoviesResponse = moviesSchemaResponse.parse(movies[0]);
+  const returnMovies: TMoviesResponse = moviesSchemaResponse.parse(movies);
 
   const pagination: Pagination = {
     prevPage:
       page > 1
-        ? `http://localhost:3000/movies?page=${
-            page - 1
-          }&perPage=${perPage}&order=${order}&sort=${sort}`
+        ? `http://localhost:3000/movies?page=${page - 1}&perPage=${perPage}`
         : null,
     nextPage:
       perPage * page < count
-        ? `http://localhost:3000/movies?page=${
-            page + 1
-          }&perPage=${perPage}&order=${order}&sort=${sort}`
+        ? `http://localhost:3000/movies?page=${page + 1}&perPage=${perPage}`
         : null,
     count,
     data: returnMovies,
